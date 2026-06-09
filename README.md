@@ -120,10 +120,10 @@ démarre.
 L'environnement reste installé. Pour rejouer un autre jour :
 
 1. Ouvrez **Git Bash**.
-2. Replacez-vous dans le dossier du projet :
-
+2. Replacez-vous dans le dossier du projet :  
 ```cd ~/Desktop/emulateurChip-8```
    (adaptez le chemin (/Desktop) si vous l'avez mis ailleurs)
+
 3. Lancez :
 
 ```make run```
