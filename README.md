@@ -19,20 +19,25 @@ A Z E R
 Q S D F
 W X C V
 
+## ROMs de jeux
+
+Voici un lien vers un dépôt GitHub contenant des jeux en .ch8, un fichier exécutable par notre émulateur :
+https://github.com/netpro2k/Chip8/tree/master/games 
+
 ## Installation
 
 L'installation se fait en quelques étapes et **dépend de votre système d'exploitation**. 
 Choisissez le guide correspondant au vôtre :
 
-- **Windows** → suivez le guide [Installation sur Windows](#)
-- **Linux (Ubuntu / Debian)** → suivez le guide [Installation sur Linux](#)
+- **Windows** → suivez le guide Installation sur Windows
+- **Linux (Ubuntu / Debian)** → suivez le guide Installation sur Linux
 
 > [!NOTE]
 > Les deux méthodes aboutissent au même résultat, mais les prérequis à
 > installer ne sont pas les mêmes selon le système. Suivez bien le guide
 > de votre OS, étape par étape, dans l'ordre.
 
-# #émulateur-chip-8--installation-sur-windows
+# Installation sur Windows
 
 ## Étape 1 : Installer Python
 
@@ -41,18 +46,9 @@ https://apps.microsoft.com/detail/9ncvdn91xzqp?hl=fr-FR&gl=FR
 
 Cliquez sur "Télécharger".
 
-> [!IMPORTANT]
-> Sur le tout premier écran de l'installation, cochez la case
-> **"Add Python to PATH"** (en bas de la fenêtre) AVANT de cliquer
-> sur « Install Now ».
->
-> Si vous oubliez cette case, les commandes `python` ne seront pas
-> reconnues et l'installation échouera. En cas d'oubli, désinstallez
-> Python et recommencez en cochant la case.
-
 ## Étape 2 : Installer Chocolatey
 
-Chocolatey est un gestionnaire de paquets qui nous sert à installer `git` et `make`.
+Chocolatey est un gestionnaire de paquets qui nous sert à installer `git`, `make` et `vcredist140` (obligatoire pour lancer le programme).
 
 1. Ouvrez **PowerShell en tant qu'administrateur** :
    Clic droit sur le menu Démarrer → **"Windows PowerShell (admin)"**.
@@ -69,6 +65,7 @@ Chocolatey est un gestionnaire de paquets qui nous sert à installer `git` et `m
 Toujours dans **PowerShell administrateur**, tapez :
 ```choco install git -y```
 ```choco install make -y```
+```choco install vcredist140 -y```
 
 > Git installe aussi **"Git Bash"**, le terminal dont vous aurez besoin
 > à l'étape suivante. Make permet de lancer l'installation et le programme.
@@ -143,7 +140,7 @@ dans le dossier du projet, relancez :
 make install
 
 
-# #émulateur-chip-8--installation-sur-linux
+# Installation sur Linux
 
 > [!NOTE]
 > Ce guide est écrit pour Ubuntu et Debian (commande `apt`). Pour Fedora,
@@ -158,7 +155,7 @@ système pour que l'interface graphique (Gooey/wxPython) fonctionne.
 
 Ouvrez un terminal (CTRL+Alt+T) et tapez :
 ```sudo apt update```
-```sudo apt install -y python3 python3-venv python3-dev python3-pip build-essential libgtk-3-dev make git Libgtk-3-dev libsdl2-2.0-0 libsdl2-dev libglu1-mesa Libglu1-mesa-dev Libjpeg-dev libtiff-dev libpng-dev```
+```sudo apt install -y python3 python3-venv python3-dev python3-pip build-essential libgtk-3-dev make git libgtk-3-dev libsdl2-2.0-0 libsdl2-dev libglu1-mesa libglu1-mesa-dev libjpeg-dev libtiff-dev libpng-dev```
 
 > [!IMPORTANT]
 > Cette commande demande votre **mot de passe** (celui de votre session).
