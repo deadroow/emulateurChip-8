@@ -3,8 +3,8 @@ import pygame
 CHIP8_LARGEUR = 64
 CHIP8_HAUTEUR = 32
 
-PIXEL_ALLUME = (139, 200, 254)
-PIXEL_ETEINT = (5,   27,  44)
+PIXEL_ALLUME = (255,255,255)
+PIXEL_ETEINT = (0,0,0)
 
 
 class Ecran:

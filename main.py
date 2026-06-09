@@ -1,10 +1,10 @@
-import sys
 import pygame
 from app import Ecran, chip_8, DetectionTouche
 from Rom import ROM, CreateRom
-from outils import clear_screen
-import os
+from outils import clear_screen, Explorateur
 import subprocess
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 RESOLUTIONS = {
     "moyen": (1024, 512),
@@ -12,33 +12,31 @@ RESOLUTIONS = {
 }
 
 def main():
+    # Dossier ou se trouve main.py, la racine du projet
+    DOSSIER_PROJET = os.path.dirname(os.path.abspath(__file__))
 
-    
     # Si aucun argument n'est fourni, on lance le menu
     if len(sys.argv) < 2:
-        dossier_actuel = os.path.dirname(os.path.abspath(__file__))
-        chemin_menu = os.path.join(dossier_actuel, "Menu", "Menu.py")
-        
+        chemin_menu = os.path.join(DOSSIER_PROJET, "outils", "Explorateur.py")
         if os.path.exists(chemin_menu):
-            # On utilise sys.executable pour être sûr d'utiliser le même environnement virtuel (.venv)
             subprocess.run([sys.executable, chemin_menu])
         else:
-            print(f"Erreur : Le fichier menu est introuvable ici : {chemin_menu}")
-        
-        sys.exit(0) # On quitte main.py après avoir fermé le menu
+            print(f"Erreur : Le fichier Explorateur est introuvable ici : {chemin_menu}")
+        sys.exit(0)
 
+    chemin_rom       = sys.argv[1] # Le chemin de la ROM est dans l'argument 1 (ex : main.py "C:\chemin")
+    choix_taille     = sys.argv[2] if len(sys.argv) > 2 else "petit" #  # La taille s'il y en a une (ex : main.py C:\chemin "grand")
 
+    # .get cherche dans le dico RESOLUTIONS la clé correspondante à grand ou moyen, et renvoyer la valeur, sinon c'est (1024, 512) défaut
+    largeur, hauteur = RESOLUTIONS.get(choix_taille, (1024, 512)) 
 
-    chemin_rom       = sys.argv[1]
-    choix_taille     = sys.argv[2] if len(sys.argv) > 2 else "moyen"
-    largeur, hauteur = RESOLUTIONS.get(choix_taille, (1024, 512))
-
-    # Un seul pygame.init() pour tout le processus
     pygame.init()
-    pygame.mixer.init() # initialisation du son
+    pygame.mixer.init()
     clear_screen()
-    bip=pygame.mixer.Sound("outils/bip.wav")
-    son=None
+
+    # Chemin absolu vers le son, marche peu importe d'ou est lance main.py
+    bip = pygame.mixer.Sound(os.path.join(DOSSIER_PROJET, "outils", "bip.wav"))
+    son = None
     ecran      = Ecran(largeur_fenetre=largeur, hauteur_fenetre=hauteur)
     clavier    = DetectionTouche()
     cpu        = chip_8(clavier=clavier)

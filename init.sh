@@ -1,44 +1,46 @@
 #!/bin/bash
-
-# Arrête le script en cas d'erreur
+# Arrête le script en cas d'erreur (sauf là où on gère explicitement l'échec)
 set -euo pipefail
 
 create_venv_boilerplate(){
     echo "________________________________________________"
-    echo "Instalation des bibliothèque nécéssaire au programme"
-    
+    echo "Installation des bibliothèques nécessaires au programme"
+
     # 1. Création du venv s'il n'existe pas
     if [ ! -d ".venv" ]; then
         echo "[init] Création du venv..."
-        # On teste 'python' ou 'py' selon le système
         python3 -m venv .venv || python -m venv .venv || py -m venv .venv
     else
         echo "[init] .venv existe déjà."
     fi
 
-    # 2. Détection du script d'activation (Windows vs Linux/Mac)
-    if [ -f ".venv/Scripts/activate" ]; then
-        source .venv/Scripts/activate
+    # 2. Détection du Python du venv (Windows vs Linux/Mac)
+    if [ -f ".venv/Scripts/python.exe" ]; then
+        VENV_PY=".venv/Scripts/python.exe"
+    elif [ -f ".venv/Scripts/python" ]; then
+        VENV_PY=".venv/Scripts/python"
     else
-        source .venv/bin/activate
+        VENV_PY=".venv/bin/python"
     fi
 
-    # 3. Mise à jour de pip (toujours une bonne pratique)
-    pip install --upgrade pip
+    # 3. Mise à jour de pip via le Python du venv (pas besoin d'activer)
+    "$VENV_PY" -m pip install --upgrade pip || echo "[init] Avertissement : échec mise à jour de pip."
 
     # 4. Installation des dépendances
     if [ -f "requirements.txt" ]; then
         echo "[init] Installation des dépendances depuis requirements.txt..."
-        pip install -r requirements.txt
+        "$VENV_PY" -m pip install -r requirements.txt \
+            || echo "[init] Avertissement : certaines dépendances ont échoué (vérifie wxPython sous Linux)."
     else
         echo "[init] requirements.txt introuvable. Installation par défaut..."
-        pip install pylint pygame pytest
-        pip freeze > requirements.txt
+        "$VENV_PY" -m pip install pylint pygame pytest \
+            || echo "[init] Avertissement : installation par défaut partielle."
+        "$VENV_PY" -m pip freeze > requirements.txt
     fi
 
     echo "________________________________________________"
     echo "Installation finie."
-    echo "Pour bien commencer, il est conseillé d'activer le venv avec : source .venv/Scripts/activate (ou .venv/bin/activate)"
+    echo "Vous pouvez maintenant lancer l'émulateur avec : make run"
 }
 
 create_venv_boilerplate

@@ -3,7 +3,7 @@ import subprocess
 import sys
 import os
 
-
+# Petit script Gooey qui sert a choisir une ROM Chip-8.
 # Gooey transforme le code en une interface graphique pour être user-friendly
 @Gooey(
     program_name="Emulateur Chip8 - Launcher",
@@ -11,6 +11,7 @@ import os
     progress_regex=r"^progress: (?P<current>\d+)/(?P<total>\d+)$",
     progress_expr="current / total * 100"
 )
+
 def chemin():
     # Parser Gooey pour gérer les arguments utilisateur
     parser = GooeyParser(description="Sélectionnez le fichier Chip8 que vous voulez exécuter")
@@ -33,23 +34,30 @@ def chemin():
     if not os.path.isfile(fichier):
         print(f"Erreur : le fichier '{fichier}' n'existe pas.")
         sys.exit(1)
-
     print(f"Fichier sélectionné : {fichier}")
 
-    # Construire le chemin d'accès au fichier Menu.py situé dans le même dossier
-    emulatorPath = os.path.join(DOSSIER_RACINE, "Menu", "Menu.py")
+    # Remonte d'un dossier pour atteindre la racine du projet où se trouve main.py (car Explorateur.py est dans /outils)
+    racine = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    emulator_path = os.path.join(racine, "main.py")
 
-    # Vérifie que Menu.py existe
-    if not os.path.isfile(emulatorPath):
-        print(f"Erreur : Menu.py introuvable à '{emulatorPath}'")
+    # Vérifie que main.py existe
+    if not os.path.isfile(emulator_path):
+        print(f"Erreur : main.py introuvable à '{emulator_path}'")
         sys.exit(1)
-
-    print("Lancement de l'émulateur...")
-
-    # Lancer Menu.py avec le fichier ROM en argument
+        
+    print("Lancement de l'emulateur")
     try:
-        subprocess.run([sys.executable, emulatorPath, fichier], check=True)
+        subprocess.run(
+            [sys.executable, emulator_path, fichier],
+            check=True,
+            cwd=racine
+        )
     except subprocess.CalledProcessError as e:
-        print(f"Erreur lors de l'exécution de l'émulateur : {e}")
+        print(f"Erreur lors de l'execution de l'emulateur : {e}")
 
+def main():
+    chemin()
 
+# Pour lancer le programme
+if __name__=="__main__":
+    main()
