@@ -53,19 +53,24 @@ Chocolatey est un gestionnaire de paquets qui nous sert à installer `git`, `mak
 1. Ouvrez **PowerShell en tant qu'administrateur** :
    Clic droit sur le menu Démarrer → **"Windows PowerShell (admin)"**.
 
-2. Collez cette commande et appuyez sur Entrée, cela télécharge Chocolatey (gestionnaire de téléchargement) :
+2. Collez cette commande et appuyez sur Entrée, cela télécharge Chocolatey (gestionnaire de téléchargement) :  
+
 ```Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))```
 
 3. Fermez puis rouvrez **PowerShell administrateur** pour
-   que Chocolatey soit pris en compte. Vérifiez avec :
+   que Chocolatey soit pris en compte. Vérifiez avec :  
+
 ```choco --version```
 
 ## Étape 3 : Installer Git et Make
 
-Toujours dans **PowerShell administrateur**, tapez :
-```choco install git -y```
-```choco install make -y```
-```choco install vcredist140 -y```
+Toujours dans **PowerShell administrateur**, tapez :  
+
+`choco install git -y`  
+
+`choco install make -y`  
+
+`choco install vcredist140 -y`  
 
 > Git installe aussi **"Git Bash"**, le terminal dont vous aurez besoin
 > à l'étape suivante. Make permet de lancer l'installation et le programme.
@@ -81,17 +86,21 @@ Une fois terminé, **fermez PowerShell**.
    > d'installation et provoquerait une erreur.
 
 2. Placez-vous où vous voulez télécharger le projet, par exemple le bureau :
+
 ```cd ~/Desktop```
 
 3. Clonez le dépôt dans ce dossier :
+
 ```git clone https://github.com/deadroow/emulateurChip-8.git```
 
 4. Entrez dans le dossier du projet :
+
 ```cd emulateurChip-8```
 
 ## Étape 5 : Installer les dépendances
 
 Toujours dans **Git Bash**, dans le dossier du projet :
+
 ```make install```
 
 Cette commande crée un environnement Python isolé (`.venv`) et installe
@@ -99,6 +108,8 @@ toutes les bibliothèques nécessaires (Gooey, pygame, etc.).
 Patientez car l'installation peut prendre quelques minutes.
 
 ## Étape 6 : Lancer le programme
+Pour lancer, tapez : 
+
 ```make run```
 
 Une fenêtre s'ouvre pour choisir un fichier ROM (`.ch8`), puis l'émulateur
@@ -110,9 +121,11 @@ L'environnement reste installé. Pour rejouer un autre jour :
 
 1. Ouvrez **Git Bash**.
 2. Replacez-vous dans le dossier du projet :
+
 ```cd ~/Desktop/emulateurChip-8```
    (adaptez le chemin (/Desktop) si vous l'avez mis ailleurs)
 3. Lancez :
+
 ```make run```
 
 Pas besoin de refaire `make install` : il ne sert qu'à la première
@@ -154,7 +167,9 @@ depuis le terminal. Python a aussi besoin de quelques bibliothèques
 système pour que l'interface graphique (Gooey/wxPython) fonctionne.
 
 Ouvrez un terminal (CTRL+Alt+T) et tapez :
+
 ```sudo apt update```
+
 ```sudo apt install -y python3 python3-venv python3-dev python3-pip build-essential libgtk-3-dev make git libgtk-3-dev libsdl2-2.0-0 libsdl2-dev libglu1-mesa libglu1-mesa-dev libjpeg-dev libtiff-dev libpng-dev```
 
 > [!IMPORTANT]
@@ -170,18 +185,23 @@ Ouvrez un terminal (CTRL+Alt+T) et tapez :
 
 1. Placez-vous où vous voulez télécharger le projet, par exemple votre
    dossier personnel :
+
 ```cd ~```
 
 2. Clonez le dépôt dans ce dossier :
+
 ```git clone https://github.com/deadroow/emulateurChip-8.git```
 
 3. Entrez dans le dossier du projet :
+
 ```cd emulateurChip-8```
 
 ## Étape 3 : Installer les dépendances
 
 Dans le dossier du projet, tapez :
+
 ```chmod 777 init.sh```
+
 Puis :
 ```make install```
 
@@ -190,7 +210,8 @@ toutes les bibliothèques nécessaires (Gooey, pygame, etc.).
 Patientez car l'installation peut prendre quelques minutes.
 
 ## Étape 4 : Lancer le programme
-make run
+Pour lancer, taper : 
+```make run```
 
 Une fenêtre s'ouvre pour choisir un fichier ROM (`.ch8`), puis l'émulateur
 démarre.
@@ -201,7 +222,8 @@ L'environnement reste installé. Pour rejouer un autre jour :
 
 1. Ouvrez un terminal.
 2. Replacez-vous dans le dossier du projet :
-cd ~/emulateurChip-8
+
+```cd ~/emulateurChip-8```
    (adaptez le chemin si vous l'avez mis ailleurs)
 3. Lancez :
 make run
@@ -213,15 +235,20 @@ installation.
 
 **"ImportError: libSDL2-2.0.so.0: cannot open shared object file"**
 → installez SDL2 :
+
 ```sudo apt update```
+
 ```sudo apt install -y libsdl2-2.0-0 libsdl2-dev```
 puis vérifiez que l'installation à bien marché :
+
 ```ldconfig -p | grep SDL2```
 vous devez obtenir une ligne ressembl
+
 ```libSDL2-2.0.so.0 => /usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0```
 
 **"make: command not found"**
 → `make` n'est pas installé. Reprenez l'Étape 1 :
+
 ```sudo apt install -y make```.
 
 **"The virtual environment was not created…" ou erreur sur `venv`**
@@ -237,9 +264,8 @@ Puis relancez `make install`.
 
 Si l'erreur persiste, installez wxPython depuis une version précompilée
 (remplacez `ubuntu-24.04` par votre version, visible avec `lsb_release -rs`) :
-.venv/bin/python -m pip install -U 
--f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 
-wxPython
+
+```.venv/bin/python -m pip install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 wxPython```
 Puis à nouveau `make install`.
 
 **La fenêtre graphique ne s'ouvre pas / erreur "no display"**
