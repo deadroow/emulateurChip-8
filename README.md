@@ -7,13 +7,14 @@ https://www.python.org/downloads/
 
 Télécharger la dernière version pour Windows de l'installateur.
 
-> **TRÈS IMPORTANT** : sur le tout premier écran de l'installation,
-> cochez la case **"Add Python to PATH"** (en bas de la fenêtre)
-> AVANT de cliquer sur « Install Now ».
+> [!IMPORTANT]
+> Sur le tout premier écran de l'installation, cochez la case
+> **"Add Python to PATH"** (en bas de la fenêtre) AVANT de cliquer
+> sur « Install Now ».
 >
 > Si vous oubliez cette case, les commandes `python` ne seront pas
-> reconnues et l'installation échouera plus loin. En cas d'oubli,
-> désinstallez Python et recommencez en cochant la case.
+> reconnues et l'installation échouera. En cas d'oubli, désinstallez
+> Python et recommencez en cochant la case.
 
 ## Étape 2 : Installer Chocolatey
 
