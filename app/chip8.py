@@ -1,4 +1,3 @@
-from outils.Couleur import texte 
 from random import randint
 
 
@@ -50,7 +49,7 @@ class chip_8:
 
                 if NN==0xE0:
                     self.ecran=[0]*(64*32)
-                    print(texte("Effacement de l'écran","vert"))
+                    
 
                 elif NN==0xEE: #sort d'une sous routine
                     if self.SP>=1 and self.SP<16:
@@ -60,54 +59,47 @@ class chip_8:
                         print(texte("Retour de sous routine","bleu"))
 
                     else:
-                        print(texte(f"Error la stack est déja vide  {hex(opcode)} ","rouge"))
+                        print(f"Error la stack est déja vide  {hex(opcode)} ")
                     
                 else:
                     self.error(opcode)
 
             case 0x1:  # donne l'addresse NNN a pc
                 self.pc=NNN
-                print(texte(f"pc={NNN}","bleu"))
 
 
-            case 0x2: # régle pc a l'adresse NNN et sauvegarde son ancien adresse dans stack incrémente SP
+            case 0x2: # régle pc a l'adresse NNN et sauvegarde son ancienne adresse dans stack incrémente SP
                 if self.SP < len(self.stack):
                     self.stack[self.SP]=self.pc
                     self.SP+=1
                     self.pc=NNN
-                    print(texte(f"la valeur de pc est sauvegarder dans la stack a l'emplacment {self.SP} et pc={NNN}","bleu"))
                 else:
-                    print(texte(f"Error la stack est déja pleine  {hex(opcode)} ","rouge"))
+                    print(f"Error la stack est déja pleine  {hex(opcode)} ")
 
 
 
             case 0x3:# si vx == NN saute instruction
                 if self.v[x]==NN:
                     self.pc+=2
-                    print(texte(f"v({x}) == {NN}, saut de la prochaine instruction","bleu"))
 
             case 0x4:# si vx diff de NN saute instruction
                 if self.v[x]!=NN:
                     self.pc+=2
-                    print(texte(f"{self.v[x]} != {NN} saut de la prochaine instruction.","bleu"))
 
 
             case 0x5: #si vx == vy saute instruction 
                 if N==0:
                     if self.v[x]==self.v[y]:            
                         self.pc+=2
-                        print(texte(f"v({x})={self.v[x]} == v({y})={self.v[y]} saut de la prochaine instruction.","bleu"))
                 else:
                     self.error(opcode)
 
 
             case 0x6: # donne la valeur NN a V[x]
                 self.v[x]=NN
-                print(texte(f"V{x} = {NN}", "cyan"))
 
             case 0x7: # rajoute NN a vx et mettre un modulo 256 sur vx
                 self.v[x]=(self.v[x]+NN) & 0xFF
-                print(texte(f"v({x}) = v({x}) + {NN}","cyan"))
 
 
             case 0x8:
@@ -115,19 +107,15 @@ class chip_8:
 
                     case 0x0:# stock vy dans vx
                         self.v[x]= self.v[y]
-                        print(texte(f"v{x} = v{y}","cyan"))
 
                     case 0x1:# vx stocke le or de vx et vy 
                         self.v[x]=self.v[x]|self.v[y]
-                        print(texte(f"v({x})= v({x}) | v({y})","cyan"))
 
                     case 0x2: # result and vx et vy sauv dans vx
                         self.v[x]=self.v[x] & self.v[y]
-                        print(texte(f"v({x})= v({x}) & v({y})","cyan"))
 
                     case 0x3: # vx= vx xor vy
                         self.v[x]=self.v[x] ^self.v[y]
-                        print(texte(f"v({x})= v({x}) ^ v({y}) (bits)","cyan"))
 
                     case 0x4: # ADD Vx, Vy
                         somme = self.v[x] + self.v[y]   
@@ -140,7 +128,6 @@ class chip_8:
                         self.v[x] = somme & 0xFF
                         # 3. On met à jour VF à la toute fin
                         self.v[0xF] = retenue
-                        print(texte(f"v({x})= v({x}) + v({y}) ","cyan"))
 
 
                     case 0x5: # ont cherche vx=vx-vy
@@ -152,12 +139,10 @@ class chip_8:
                         self.v[x]=(self.v[x]-self.v[y])&0xFF
                         self.v[0xF]=s
 
-                        print(texte(f"v({x})= v({x}) - v({y}) ","cyan"))
 
                     case 0x6: # si dernier bit de vx == 1 alors vf=1 sinon vf=0 dans tout les cas apres div vx//2 décalage a droite
                         self.v[0xF]=self.v[x]&0x01
                         self.v[x]=self.v[x]>>1
-                        print(texte(f"divise par deux la valeur du registre v({x})","cyan"))
                     
                     case 0x7: # vy - vx
                         if self.v[y]>self.v[x]:
@@ -165,12 +150,10 @@ class chip_8:
                         else:
                             self.v[0xF]=0
                         self.v[x]=(self.v[y]-self.v[x])&0xFF
-                        print(texte(f"v({x})= v({y}) - v({x}) ","cyan"))
 
                     case 0xE:# décalage a gauche
                         self.v[0xF]=(self.v[x]&0x80)>>7
                         self.v[x]= (self.v[x]<<1) & 0xFF
-                        print(texte(" On multiplie par 2  ","cyan"))
                     case _:
                         self.error(opcode)
 
@@ -179,7 +162,6 @@ class chip_8:
                 if N==0:
                     if self.v[x]!=self.v[y] :
                         self.pc+=2
-                        print(texte(f"saute une instruction: v({x})!=v({y}) ","bleu"))
                 else:
                     self.error(opcode)
 
@@ -187,17 +169,14 @@ class chip_8:
             case 0xA: # change l'addresse I par NNN
                 
                 self.I=NNN
-                print(texte(f"on donne au registre I la valeur {NNN}  ","jaune"))
 
             case 0xB: # jump a l'addresse nnn+vo
                 self.pc=NNN+self.v[0]
-                print(texte(f"pc=v(0)+{NNN}","bleu"))
                 
 
 
             case 0xC: # Donne une valeur aléatoir au registre v[x]
                 self.v[x]=(randint(0,255)& NN) 
-                print(texte(f"V{x} = Random & {hex(NN)} ({self.v[x]})","cyan"))
 
             case 0xD: # dessin
                 x_pos = self.v[x] % 64
@@ -214,7 +193,6 @@ class chip_8:
                             if self.ecran[idx] == 1:
                                 self.v[0xF] = 1  # collision
                             self.ecran[idx] ^= 1
-                print(texte("Dessine les sprite","vert"))
 
             case 0xE:
                 match NN:
@@ -223,13 +201,11 @@ class chip_8:
                         index_touche = self.v[x] & 0xF 
                         if self.etat_touche[index_touche]:
                             self.pc += 2
-                            print(texte(f"Touche {hex(index_touche)} appuyée, skip", "marron"))
 
                     case 0xA1: # skip next if key Vx is NOT pressed
                         index_touche = self.v[x] & 0xF
                         if not self.etat_touche[index_touche]:
                             self.pc += 2
-                            print(texte(f"Touche {hex(index_touche)} non appuyée, skip", "marron"))
 
                     case _:
                         self.error(opcode)
@@ -238,7 +214,6 @@ class chip_8:
                 match NN:
                     case 0x07:
                         self.v[x]=self.delay_timer
-                        print(texte(f"V{x} = Delay Timer ({self.delay_timer})", "violet"))
 
                     case 0x0A:
                         if self.clavier:
@@ -246,46 +221,38 @@ class chip_8:
                             if touche is None:
                                 return
                             self.v[x] = touche
-                            print(texte(f"Attente touche : V{x} = {touche}", "marron"))
                         else:
                             return
                     
                     case 0x15:
                         self.delay_timer=self.v[x]
-                        print(texte(f"Delay Timer = V{x} ({self.v[x]})", "violet"))
 
                     case 0x18:
                         self.sound_timer=self.v[x]
-                        print(texte(f"Sound Timer = V{x} ({self.v[x]})", "violet"))
 
                     case 0x1E: # rajout de la valeur v(x) au registre I
                         self.I+=self.v[x]
-                        print(texte(f"I = I + V{x}", "jaune"))
 
                     case 0x29:
                         self.I=(5*(self.v[x])) & 0x0FFF
-                        print(texte(f"I = Adresse sprite pour caractère V{x}", "jaune"))
 
                     case 0x33:
                         #i= centaine i+1 = dizaine i+2 = unité
                         self.memoir[self.I]=self.v[x]//100
                         self.memoir[self.I+1]=(self.v[x]%100)//10
                         self.memoir[self.I+2]=self.v[x]%10
-                        print(texte(f"Stockage BCD de V{x} à I", "jaune"))
 
                     case 0x55:
                         i = 0
                         while i <= x:
                             self.memoir[self.I + i] = self.v[i]
                             i += 1
-                        print(texte(f"Dump registres V0-V{x} en mémoire à I", "jaune"))
 
                     case 0x65:
                         i = 0
                         while i <= x:
                             self.v[i] = self.memoir[self.I + i]
                             i += 1
-                        print(texte(f"Chargement registres V0-V{x} depuis I", "jaune"))
                     
                     case _:
                         self.error(opcode)
@@ -293,4 +260,4 @@ class chip_8:
                 self.error(opcode)
 
     def error(self,instruction):
-        print(texte(hex(instruction)," rouge"))
+        print(hex(instruction))
