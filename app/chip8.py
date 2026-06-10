@@ -56,7 +56,6 @@ class chip_8:
                         self.SP-=1
                         self.pc=self.stack[self.SP] # donne la valeur stocké a pc
                         self.stack[self.SP+1]=0 # vide la stack
-                        print(texte("Retour de sous routine","bleu"))
 
                     else:
                         print(f"Error la stack est déja vide  {hex(opcode)} ")
