@@ -1,8 +1,6 @@
 import functools
 from importlib import import_module
 
-from outils.Couleur import texte
-
  
 class ROM:
     """Gère le chargement et la validation d'une ROM CHIP-8."""
@@ -14,7 +12,7 @@ class ROM:
             if "path" in kwargs:
                 os = import_module("os")
                 if not os.path.exists(kwargs["path"]):
-                    print(texte(f"Le chemin '{kwargs['path']}' n'existe pas.", "bleu"))
+                    print(f"Le chemin '{kwargs['path']}' n'existe pas.")
                     return
             return fc(*args, **kwargs)
         return _
@@ -56,5 +54,5 @@ class ROM:
         """Copie la ROM en mémoire à partir de 0x200."""
         for i, byte in enumerate(content):
             self.memoir[0x200 + i] = byte
-        print(texte(f"ROM chargée ({len(content)} bytes) depuis '{path}'", "vert"))
+        print(f"ROM chargée ({len(content)} bytes) depuis '{path}'")
         return content
