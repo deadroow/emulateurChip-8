@@ -6,7 +6,7 @@ create_venv_boilerplate(){
     echo "________________________________________________"
     echo "Installation des bibliothèques nécessaires au programme"
 
-    # 1 Création du venv s'il n'existe pas (priorité à Python 3.12)
+    # Création du venv s'il existe pas (priorité à Python 3.12)
     if [ ! -d ".venv" ]; then
         echo "[init] Création du venv..."
         py -3.12 -m venv .venv 2>/dev/null \
@@ -18,7 +18,7 @@ create_venv_boilerplate(){
         echo "[init] .venv existe déjà."
     fi
 
-    # 2 Détection du Python du venv (Windows vs Linux/Mac)
+    # Détection du Python du venv (Windows vs Linux/Mac)
     if [ -f ".venv/Scripts/python.exe" ]; then
         VENV_PY=".venv/Scripts/python.exe"
     elif [ -f ".venv/Scripts/python" ]; then
@@ -27,10 +27,10 @@ create_venv_boilerplate(){
         VENV_PY=".venv/bin/python"
     fi
 
-    # 3 Mise à jour de pip via le Python du venv (pas besoin d'activer)
+    # Mise à jour de pip via le Python du venv (pas besoin d'activer)
     "$VENV_PY" -m pip install --upgrade pip || echo "[init] Avertissement : échec mise à jour de pip."
 
-    # 4 Installation des dépendances
+    # Installation des dépendances
     if [ -f "requirements.txt" ]; then
         echo "[init] Installation des dépendances depuis requirements.txt..."
         "$VENV_PY" -m pip install -r requirements.txt \
