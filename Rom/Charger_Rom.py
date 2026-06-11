@@ -1,58 +1,30 @@
-import functools
-from importlib import import_module
+import os
 
- 
+
 class ROM:
     """Gère le chargement et la validation d'une ROM CHIP-8."""
 
-    @staticmethod
-    def check_path(fc):
-        @functools.wraps(fc)
-        def _(*args, **kwargs):
-            if "path" in kwargs:
-                os = import_module("os")
-                if not os.path.exists(kwargs["path"]):
-                    print(f"Le chemin '{kwargs['path']}' n'existe pas.")
-                    return
-            return fc(*args, **kwargs)
-        return _
-
-    @staticmethod
-    def check_rom_factory(checklist: list):
-        def check_rom(fc):
-            @functools.wraps(fc)
-            def _(*args, **kwargs):
-                for el in checklist:
-                    if el == "len":
-                        content   = kwargs.get("content", b"")
-                        available = len(args[0].memoir) - 0x200
-                        if len(content) > available:
-                            raise ValueError(
-                                f"ROM trop volumineuse : {len(content)} bytes "
-                                f"(max : {available} bytes)"
-                            )
-                return fc(*args, **kwargs)
-            return _
-        return check_rom
-
-    @staticmethod
-    def get_data_factory(mode="rb"):
-        def get_data(fc):
-            @functools.wraps(fc)
-            def _(*args, **kwargs):
-                if "path" in kwargs:
-                    with open(kwargs["path"], mode=mode) as fp:
-                        kwargs["content"] = fp.read()
-                return fc(*args, **kwargs)
-            return _
-        return get_data
-
-    @check_path
-    @get_data_factory(mode="rb")
-    @check_rom_factory(["len"])
-    def load(self, *, path, content=None):
+    def load(self, path):
         """Copie la ROM en mémoire à partir de 0x200."""
+        # Vérifie que le fichier existe
+        if not os.path.exists(path):
+            print(f"Le chemin '{path}' n'existe pas.")
+            return
+
+        # Lit le contenu binaire de la ROM
+        with open(path, "rb") as fp:
+            content = fp.read()
+
+        # Vérifie que la ROM tient dans la mémoire disponible (le programme commence à 0x200)
+        available = len(self.memoir) - 0x200
+        if len(content) > available:
+            raise ValueError(
+                f"ROM trop volumineuse : {len(content)} bytes (max : {available} bytes)"
+            )
+
+        # Recopie chaque octet en mémoire à partir de 0x200
         for i, byte in enumerate(content):
             self.memoir[0x200 + i] = byte
+
         print(f"ROM chargée ({len(content)} bytes) depuis '{path}'")
         return content
