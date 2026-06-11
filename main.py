@@ -6,6 +6,7 @@ import subprocess
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+
 RESOLUTIONS = {
     "moyen": (1024, 512),
     "grand": (1280, 640),
@@ -85,7 +86,7 @@ def main():
         ecran.display_buffer = cpu.ecran[:]
         ecran.render()
 
-        # régle a 60 par second
+        # régle a 60 par second (*10 ça fait 600Hz)
         horloge.tick(60)
 
     ecran.quit()

@@ -32,13 +32,20 @@ class chip_8:
 
 
     def cycle (self):
-        opcode=(self.memoir[self.pc]<<8) | self.memoir[self.pc+1] 
-        t=(opcode&0xF000)>>12
-        x=(opcode&0x0F00)>>8
-        y=(opcode&0x00F0)>>4
-        N=(opcode&0x000F)
-        NN=(opcode&0x00FF)
-        NNN=(opcode&0x0FFF)
+        # construit l'opcode 16 bits à partir de deux octets consécutifs en mémoire
+        opcode = (self.memoir[self.pc] << 8) | self.memoir[self.pc + 1]
+        # premier nibble qui indique la famille d'instructions
+        t = (opcode & 0xF000) >> 12
+        # deuxième nibble utilisé comme numéro du registre VX
+        x = (opcode & 0x0F00) >> 8
+        # troisième nibble utilisé comme numéro du registre VY
+        y = (opcode & 0x00F0) >> 4
+        # dernier nibble valeur sur 4 bits (souvent appelée N)
+        N = opcode & 0x000F
+        # dernier octet valeur sur 8 bits (souvent appelée NN)
+        NN = opcode & 0x00FF
+        # 12 bits de poids faible adresse mémoire (souvent appelée NNN)
+        NNN = opcode & 0x0FFF
         
         self.pc+=2 # pointe vers l'octet suivant 
 

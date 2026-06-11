@@ -21,7 +21,7 @@ class Ecran:
         )
         pygame.display.set_caption("CHIP-8 Emulator")
 
-        # Buffer logique : 0 = éteint, 1 = allumé
+        # Buffer logique 0 = éteint, 1 = allumé
         self.display_buffer = [0] * (CHIP8_LARGEUR * CHIP8_HAUTEUR)
         self.pixel_alpha    = [0] * (CHIP8_LARGEUR * CHIP8_HAUTEUR)
 
@@ -42,7 +42,7 @@ class Ecran:
             if allume:
                 self.pixel_alpha[i] = 255
             else:
-                # Effet phosphore : fade-out progressif quand le pixel s'éteint
+                # Effet fade-out progressif quand le pixel s'éteint
                 self.pixel_alpha[i] = max(0, self.pixel_alpha[i] - 25)
 
             if self.pixel_alpha[i] > 0:
